@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<meta name="x-apple-disable-message-reformatting">
+	<title></title>
+    <!--[if mso]> 
+<noscript> 
+<xml> 
+<o:OfficeDocumentSettings> 
+<o:PixelsPerInch>96</o:PixelsPerInch> 
+</o:OfficeDocumentSettings> 
+</xml> 
+</noscript> 
+<![endif]-->
+    <style>
+		table, td, div, h1, p {font-family: Arial, sans-serif;}
+		table, td {}
+        #table-header{
+        color: white;
+        background-color: #5a586f;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+
+      }
+      #pay_now_btn{ color: white;
+        background-color: #5a586f;
+    padding: 15px 100px 15px 100px;
+border-radius: 25px;}
+	</style>
+</head>
+<body style="margin:0;padding:0;">
+    <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
+		<tr>
+			<td align="center" style="padding:0;">
+				<table role="presentation" style="width:602px;border-collapse:collapse;border-spacing:0;">
+                    <tr>
+                        <td style="padding:0;">
+                            <img src="assets/petshop-email.png" alt="header">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px 20px 20px 30px;">
+                            <p>Dear {{last_name}} {{first_name}}  {{#if middle_name}} {{middle_name}} {{/if}}</p>
+        <p>We are contacting you because there is an amount due on your purchase</p>
+        <p>{{purchase_id}}:</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0;">
+                            <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;">
+                                <tr>
+                                    <th id="table-header" colspan="3">Purchase Summary</th>
+                                </tr>
+                                <tr>
+                                    <td>Date:</td>
+                                    <td colspan="2">{{purchase_date}}</td>
+                    
+                                </tr>
+                                {{#each items}}
+                                <tr>
+                                    <td class="item" width="10%">{{this.quantity}}</td>
+                                    <td class="item" >{{this.product}}</td>
+                                    <td class="item" width="15%" >{{this.price}}</td>
+                                </tr>
+                                {{/each}}
+                                <tr>
+                                    <td></td>
+                                    <td><strong>Total amount</strong></td>
+                                    <td>{{total_amount}} Kn</td>
+                                </tr>
+                                <tr>
+                                    <td class="item"></td>
+                                    <td class="item"><strong>Amount paid</strong></td>
+                                    <td class="item">{{amount_paid}} Kn</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0;">
+                            <p>
+                                According to our records, the amount due is {{amount_due}} Kn. Please, click on the next button <strong>to pay</strong> this difference:
+                            </p>
+                                <a href="https://pet-shop.buckhill.com.hr/checkout" id="pay_now_btn">PAY NOW</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:0;">
+                            <p>
+                                If you have any other concerns, please contact our technical support team.
+                            </p>
+                            <p>
+                                Kind regards,
+                            </p>
+                            <p>
+                                Petson Team
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+			</td>
+		</tr>
+	</table>
+</body>
+
+</html>
