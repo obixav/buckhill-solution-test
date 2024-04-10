@@ -30,9 +30,23 @@
         background-color: #5a586f;
     padding: 15px 100px 15px 100px;
 border-radius: 25px;}
+.item{
+        padding: 10px 10px;
+        background: #ededed;
+        border-bottom: 1px solid #ccc;
+      
+      }
+      .item-white{
+        padding: 10px 10px;
+        border-bottom: 1px solid #ccc;
+      }
 	</style>
 </head>
 <body style="margin:0;padding:0;">
+    <div id="output"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/handlebars/dist/handlebars.min.js"></script>
+    <script id="my-template" type="text/x-handlebars-template">
     <table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
 		<tr>
 			<td align="center" style="padding:0;">
@@ -56,8 +70,8 @@ border-radius: 25px;}
                                     <th id="table-header" colspan="3">Purchase Summary</th>
                                 </tr>
                                 <tr>
-                                    <td>Date:</td>
-                                    <td colspan="2">{{purchase_date}}</td>
+                                    <td class="item">Date:</td>
+                                    <td class="item" colspan="2">{{purchase_date}}</td>
                     
                                 </tr>
                                 {{#each items}}
@@ -68,9 +82,9 @@ border-radius: 25px;}
                                 </tr>
                                 {{/each}}
                                 <tr>
-                                    <td></td>
-                                    <td><strong>Total amount</strong></td>
-                                    <td>{{total_amount}} Kn</td>
+                                    <td class="item-white"></td>
+                                    <td class="item-white"><strong>Total amount</strong></td>
+                                    <td class="item-white">{{total_amount}} Kn</td>
                                 </tr>
                                 <tr>
                                     <td class="item"></td>
@@ -81,10 +95,16 @@ border-radius: 25px;}
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding:0;">
-                            <p>
+                        <td style="padding-top:20px;">
+                            <p >
                                 According to our records, the amount due is {{amount_due}} Kn. Please, click on the next button <strong>to pay</strong> this difference:
                             </p>
+                              
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:20px 0px;text-align: center;">
+                            
                                 <a href="https://pet-shop.buckhill.com.hr/checkout" id="pay_now_btn">PAY NOW</a>
                         </td>
                     </tr>
@@ -105,6 +125,89 @@ border-radius: 25px;}
 			</td>
 		</tr>
 	</table>
+</script>
+<script>
+  const email = "admin@buckhill.co.uk";
+  const password = "admin";
+  const baseurl = "https://pet-shop.buckhill.com.hr/api/";
+  const login_path = "v1/admin/login";
+  const orders_path = "v1/orders";
+  const credentials = {
+    email: email,
+    password: password,
+  };
+  let token;
+  fetch(baseurl + login_path, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json", // specify content type as JSON
+    },
+    body: JSON.stringify(credentials), // convert data to JSON string
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json(); // parse the response JSON
+    })
+    .then((data) => {
+      token = data.data.token;
+
+      fetch(baseurl + orders_path, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch data from second API");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data); // Handle the response data from the second API
+
+          var source = document.getElementById("my-template").innerHTML;
+          var template = Handlebars.compile(source);
+
+          const dateString=data.data[0].created_at;
+          const date = new Date(dateString);
+          const options = { 
+year: 'numeric', 
+month: 'long', 
+day: 'numeric' 
+};
+          const purchase_date= new Intl.DateTimeFormat('en-US', options).format(date);
+
+          var data = {
+            first_name: data.data[0].user.first_name,
+            middle_name: data.data[0].user.middle_name,
+            last_name:data.data[0].user.last_name,
+            purchase_date:purchase_date,
+            total_amount:data.data[0].amount,
+            amount_paid:0,
+            items:data.data[0].products,
+            purchase_id:data.data[0].uuid,
+            amount_due:parseFloat(data.data[0].amount)-0
+
+          };
+          var html = template(data);
+
+          document.getElementById("output").innerHTML = html;
+        })
+        .catch((error) => {
+          console.error(
+            "There was a problem with the second fetch operation:",
+            error
+          );
+        });
+    })
+    .catch((error) => {
+      console.error("There was a problem with the fetch operation:", error);
+    });
+</script>
 </body>
 
 </html>
