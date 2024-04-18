@@ -11,3 +11,5 @@ var rules = {
     { "and": [{ "==": [{ "var": "created_at" }, "2024-04-18"] }, { "==": [{ "var": "priority" }, "high"] }] }
   ]
 };
+
+var test_data={ "department" : "project management", "issue_category" :"gui","created_at":"2024-04-18","priority":"low"  }

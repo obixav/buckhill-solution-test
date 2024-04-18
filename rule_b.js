@@ -7,4 +7,4 @@ var rules={ "and" : [
   ]}
   ] };
 
-  
+  var test_data={"delivery_fee":0,"order_status":{"title":"shipped"},"payment":{"type":"credit_card"}};

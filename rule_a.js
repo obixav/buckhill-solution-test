@@ -6,3 +6,5 @@ var rules={ "and" : [
     {"==":[ {"var":"shipping_country"},"Croatia"]}
   ]}
   ] };
+
+  var test_data={ "amount" : 0, "created_at" :"2022-10-01","shipping_country":"Italy"  }
